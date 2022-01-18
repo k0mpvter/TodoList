@@ -16,13 +16,11 @@ public class TaskManager {
     public void showAllTasks(){
         System.out.println("HERERERERE");
         for (Task task:tasks) {
-
             System.out.println(task.getName());
         }
     }
 
-    public Task createNewTask(String title, String description, String dueDateString) throws ParseException {
-        Date dueDate = new SimpleDateFormat("dd/MM/yyyy").parse(dueDateString);
+    public Task createNewTask(String title, String description, Date dueDate) throws ParseException {
 
         Task task = new Task(title, dueDate);
         if(description.length() > 0){

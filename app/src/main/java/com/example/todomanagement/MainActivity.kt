@@ -12,6 +12,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import androidx.core.graphics.drawable.DrawableCompat
@@ -19,6 +20,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.ViewCompat.setBackgroundTintList
 import com.example.todomanagement.databinding.ActivityMainBinding
 import com.example.todomanagement.databinding.NewTaskActivityBinding
+import java.text.ParseException
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -79,46 +82,58 @@ class MainActivity : AppCompatActivity() {
         val task_title: TextView = findViewById(R.id.task_title)
         val task_dueDate: TextView = findViewById(R.id.task_due_date)
 
-        val title: String = task_title.text.toString()
-        val dueDate: String = task_dueDate.text.toString()
-        val description: String = tas_binding.taskDescription.toString()
+        val dueDate: Date? = checkTaskDetails(task_title, task_dueDate)
 
-        if (title.length == 0 || dueDate.length == 0){
-            checkTaskDetails(task_title, task_dueDate)
+        if (dueDate == null){
             return
         }
 
+        val title: String = task_title.text.toString()
+        val description: String = tas_binding.taskDescription.toString()
+
         val task: Task = taskmanager.createNewTask(title, description, dueDate)
+        d
         taskmanager.addNewTask(task)
 
         showAllTasks()
         setContentView(binding.root)
     }
 
-    fun checkTaskDetails(task_title: TextView, task_dueDate: TextView){
+    fun checkTaskDetails(task_title: TextView, task_dueDate: TextView): Date?{
 
         val title = task_title.text.toString()
-        val dueDate = task_dueDate.text.toString()
+        val dueDate_S = task_dueDate.text.toString()
+        var dueDate: Date? = null
 
+        // Check if title is valid
         if(title.length == 0) {
-            ViewCompat.setBackgroundTintList(
-                task_title,
-                ColorStateList.valueOf(Color.parseColor("#FF0000")));
+                changeBorderColor(task_title, "#FF0000")
+                return null
         } else {
-            ViewCompat.setBackgroundTintList(
-                task_title,
-                ColorStateList.valueOf(Color.parseColor("#808080")));
+            changeBorderColor(task_title, "#808080")
         }
 
-        if(dueDate.length == 0) {
-            ViewCompat.setBackgroundTintList(
-                task_dueDate,
-                ColorStateList.valueOf(Color.parseColor("#FF0000")));
+        // Check if the duedate is valid
+        if(dueDate_S.length <= 9 || dueDate_S.length > 10) {
+                changeBorderColor(task_dueDate, "#FF0000")
         } else {
-            ViewCompat.setBackgroundTintList(
-                task_dueDate,
-                ColorStateList.valueOf(Color.parseColor("#808080")));
+            try {
+                dueDate = SimpleDateFormat("dd.MM.yyyy").parse(dueDate_S)
+            }
+            catch (e: ParseException) {
+                changeBorderColor(task_dueDate, "#FF0000")
+                return null
+            }
+
+            changeBorderColor(task_dueDate, "#808080")
         }
 
+        return dueDate
+    }
+
+    private fun changeBorderColor (view: View, hexColor: String){
+        ViewCompat.setBackgroundTintList(
+            view,
+            ColorStateList.valueOf(Color.parseColor(hexColor)));
     }
 }
