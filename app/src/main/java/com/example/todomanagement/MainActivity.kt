@@ -1,7 +1,11 @@
 package com.example.todomanagement
 
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -9,6 +13,10 @@ import androidx.navigation.ui.navigateUp
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
+import android.widget.TextView
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.ViewCompat.setBackgroundTintList
 import com.example.todomanagement.databinding.ActivityMainBinding
 import com.example.todomanagement.databinding.NewTaskActivityBinding
 import java.time.LocalDate
@@ -29,26 +37,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
+        taskmanager = TaskManager()
+
         tas_binding = NewTaskActivityBinding.inflate(layoutInflater)
 
         binding.buttonNewTask.setOnClickListener { view -> openNewTaskDisplay()}
-        tas_binding.buttonAddNewTask.setOnClickListener{ view -> addNewTask()}
+        //tas_binding.buttonAddNewTask.setOnClickListener{ view -> doNowSth()}
     }
 
     fun showAllTasks(){
         taskmanager.showAllTasks()
-    }
-
-    fun addNewTask(){
-        val title: String = tas_binding.taskTitle.toString()
-        val description: String = tas_binding.taskDescription.toString()
-        val dueDate: String = tas_binding.taskDueDate.toString()
-
-        //val task: Task = taskmanager.createNewTask(title, description, dueDate)
-        //taskmanager.addNewTask(task)
-
-        showAllTasks()
-        setContentView(R.layout.activity_main)
     }
 
     fun openNewTaskDisplay(){
@@ -75,5 +73,52 @@ class MainActivity : AppCompatActivity() {
     val navController = findNavController(R.id.nav_host_fragment_content_main)
     return navController.navigateUp(appBarConfiguration)
             || super.onSupportNavigateUp()
+    }
+
+    fun addNewTask(view: android.view.View) {
+        val task_title: TextView = findViewById(R.id.task_title)
+        val task_dueDate: TextView = findViewById(R.id.task_due_date)
+
+        val title: String = task_title.text.toString()
+        val dueDate: String = task_dueDate.text.toString()
+        val description: String = tas_binding.taskDescription.toString()
+
+        if (title.length == 0 || dueDate.length == 0){
+            checkTaskDetails(task_title, task_dueDate)
+            return
+        }
+
+        val task: Task = taskmanager.createNewTask(title, description, dueDate)
+        taskmanager.addNewTask(task)
+
+        showAllTasks()
+        setContentView(binding.root)
+    }
+
+    fun checkTaskDetails(task_title: TextView, task_dueDate: TextView){
+
+        val title = task_title.text.toString()
+        val dueDate = task_dueDate.text.toString()
+
+        if(title.length == 0) {
+            ViewCompat.setBackgroundTintList(
+                task_title,
+                ColorStateList.valueOf(Color.parseColor("#FF0000")));
+        } else {
+            ViewCompat.setBackgroundTintList(
+                task_title,
+                ColorStateList.valueOf(Color.parseColor("#808080")));
+        }
+
+        if(dueDate.length == 0) {
+            ViewCompat.setBackgroundTintList(
+                task_dueDate,
+                ColorStateList.valueOf(Color.parseColor("#FF0000")));
+        } else {
+            ViewCompat.setBackgroundTintList(
+                task_dueDate,
+                ColorStateList.valueOf(Color.parseColor("#808080")));
+        }
+
     }
 }

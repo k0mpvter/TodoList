@@ -21,12 +21,7 @@ public class TaskManager {
         }
     }
 
-    public void addNewTask(Task task){
-        tasks.add(task);
-    }
-
     public Task createNewTask(String title, String description, String dueDateString) throws ParseException {
-
         Date dueDate = new SimpleDateFormat("dd/MM/yyyy").parse(dueDateString);
 
         Task task = new Task(title, dueDate);
@@ -34,5 +29,12 @@ public class TaskManager {
             task.setDescription(description);
         }
         return task;
+    }
+
+    public void deleteTask(int idx){ tasks.remove(idx); }
+    public void deleteTask(Task task){ tasks.remove(task); }
+
+    public void addNewTask(Task task){
+        tasks.add(task);
     }
 }
