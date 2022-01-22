@@ -9,4 +9,10 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="welcomeText">Here will be shown the tasks you\'ve created.</string>
+    <string name="newTaskButtonText">New Task</string>
+    <string name="addNewTaskButtonText">Add new task</string>
+    <string name="titleHint">Title</string>
+    <string name="descriptionHint">Description</string>
+    <string name="due_date_Hint">Due Date: dd.MM.yyyy</string>
 </resources>
