@@ -16,7 +16,7 @@
 
     <Button
         android:id="@+id/button_new_task"
-        android:text="New Task"
+        android:text="@string/newTaskButtonText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
@@ -29,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Here will be shown the tasks you've created." />
+        android:text="@string/welcomeText" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
