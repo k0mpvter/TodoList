@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">To Do Management</string>
+    <string name="app_name">TODO Management</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -14,7 +14,7 @@
     <string name="addNewTaskButtonText">Add new task</string>
     <string name="titleHint">Title</string>
     <string name="descriptionHint">Description</string>
-    <string name="due_date_Hint">Due Date: dd.MM.yyyy</string>
+    <string name="due_date_Hint">Due Date: dd/MM/yyyy</string>
     <string name="todo_management_toolbar_text">TODO Management</string>
     <string name="addnewtaskdescription">AddNewTask</string>
 </resources>

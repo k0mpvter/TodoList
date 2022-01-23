@@ -11,6 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ToDoManagement">
         <activity
+            android:name=".TaskDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".SomeActivity"
             android:exported="false" />
         <activity

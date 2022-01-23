@@ -13,17 +13,29 @@ import java.util.ArrayList;
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder> {
 
     private ArrayList<User> taskList;
+    private OnTaskListener mOnTaskListener;
 
-    public RecyclerAdapter(ArrayList<User> taskList) {
+    public RecyclerAdapter(ArrayList<User> taskList, OnTaskListener onTaskListener) {
         this.taskList = taskList;
+        this.mOnTaskListener = onTaskListener;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView nameText;
 
-        public MyViewHolder(@NonNull View view) {
+        OnTaskListener onTaskListener;
+
+        public MyViewHolder(@NonNull View view, OnTaskListener onTaskListener) {
             super(view);
             nameText = view.findViewById(R.id.textView3);
+            this.onTaskListener = onTaskListener;
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            onTaskListener.onTaskClick(getAdapterPosition());
         }
     }
 
@@ -31,7 +43,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     @Override
     public RecyclerAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_items,parent,false);
-        return new MyViewHolder(itemView);
+        return new MyViewHolder(itemView, mOnTaskListener);
     }
 
     @Override
@@ -43,5 +55,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     @Override
     public int getItemCount() {
         return taskList.size();
+    }
+
+    public interface OnTaskListener{
+        void onTaskClick(int position);
     }
 }
