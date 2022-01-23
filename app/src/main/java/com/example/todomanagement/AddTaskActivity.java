@@ -11,10 +11,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 public class AddTaskActivity extends AppCompatActivity {
 
@@ -34,6 +34,7 @@ public class AddTaskActivity extends AppCompatActivity {
         description = findViewById(R.id.task_description);
         date = findViewById(R.id.task_due_date);
         date.addTextChangedListener(new TextWatcher() {
+
             private String current = "";
             private String ddmmyyyy = "DDMMYYYY";
             private Calendar cal = Calendar.getInstance();
