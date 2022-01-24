@@ -6,17 +6,30 @@
     android:layout_height="match_parent"
     tools:context=".TaskDetailsActivity">
 
+
+    <Button
+        android:id="@+id/back_button"
+        android:layout_width="54dp"
+        android:layout_height="46dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:background="#00EDEDED"
+        android:textAlignment="center"
+        app:icon="?attr/actionModeCloseDrawable"
+        app:iconTint="#050505" />
+
     <TextView
         android:id="@+id/title_view"
         android:layout_width="331dp"
         android:layout_height="43dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="40dp"
         android:text="TitleView"
         android:textColor="@color/black"
-        android:textSize="16sp"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:hint="Description"
         tools:ignore="MissingConstraints" />
 
     <TextView
@@ -26,6 +39,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:text="DescriptionView"
+        android:hint="Due Date"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"

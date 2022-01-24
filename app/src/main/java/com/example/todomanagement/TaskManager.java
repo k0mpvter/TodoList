@@ -1,9 +1,9 @@
 package com.example.todomanagement;
 
+import android.util.Log;
+
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class TaskManager {
     private ArrayList<Task> tasks;
@@ -15,12 +15,13 @@ public class TaskManager {
 
     public void showAllTasks(){
         System.out.println("HERERERERE");
+        Log.d("HEREREEEE"," STHIL");
         for (Task task:tasks) {
-            System.out.println(task.getName());
+            Log.d("HEREREEEE",task.getTitle());
         }
     }
 
-    public Task createNewTask(String title, String description, Date dueDate) throws ParseException {
+    public Task createNewTask(String title, String description, String dueDate) throws ParseException {
 
         Task task = new Task(title, dueDate);
         if(description.length() > 0){
@@ -35,4 +36,6 @@ public class TaskManager {
     public void addNewTask(Task task){
         tasks.add(task);
     }
+    public Task get(int idx){ return tasks.get(idx); }
+    public int size(){return tasks.size(); }
 }

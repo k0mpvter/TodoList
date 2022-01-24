@@ -1,28 +1,34 @@
 package com.example.todomanagement;
 
-import java.time.LocalDate;
-import java.util.Date;
-
 public class Task{
-    private String name;
+    private int id;
+    private String title;
     private String description;
-    private Date dueDate;
+    private String dueDate;
+    private int status;
     private boolean isChecked;
 
-    public Task(String name, Date dueDate){
-        this.name = name;
+    public Task(String name, String dueDate){
+        this.title = name;
         this.dueDate = dueDate;
     }
 
-    public String getName(){ return name; }
-    public String getDescription() { return description;}
-    public Date getDueDate() { return dueDate; }
-    public boolean getIfChecked() { return isChecked; }
+    public int getId(){ return id; }
 
+    public void setId(int id) { this.id = id; }
+
+    public String getTitle(){ return title; }
+    public String getDueDate() { return dueDate; }
+
+    public String getDescription() { return description;}
     public void setDescription(String description){
         this.description = description;
     }
 
+    public int getStatus() { return status;}
+    public void setStatus(int status) { this.status = status;}
+
+    public boolean getIfChecked() { return isChecked; }
     public void setChecked(boolean checked) {
         this.isChecked = checked;
     }
