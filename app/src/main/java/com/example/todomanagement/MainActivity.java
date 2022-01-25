@@ -7,19 +7,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity implements RecyclerAdapter.OnTaskListener {
 
-    //private ArrayList<User> taskList;
-
+    public static final String Extra_ID = "com.example.todomanagement.ID";
     public static final String Extra_TITLE = "com.example.todomanagement.TITLE";
     public static final String Extra_DESC = "com.example.todomanagement.DESC";
     public static final String Extra_DATE = "com.example.todomanagement.DATE";
-    public static final boolean Extra_CHECKED = false;
-    private TaskManager tasks;
+    public static final String Extra_STATUS = "com.example.todomanagement.STATUS";
+    //private TaskManager tasks;
+
+    private DatabaseHandler db = new DatabaseHandler(this);
     private RecyclerView recyclerView;
+    private ArrayList<Task> tasks;
     FloatingActionButton button;
 
     @Override
@@ -28,10 +33,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.O
         setContentView(R.layout.activity_main);
 
         recyclerView = findViewById(R.id.recyclerView);
-        //taskList = new ArrayList<>();
-        tasks = new TaskManager();
+        db.openDatabase();
+        tasks = db.getAllTasks();
 
-        setUserInfo();
         setAdapter();
 
         button = findViewById(R.id.button_new_task);
@@ -41,49 +45,35 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.O
             startActivity(intent);
         });
 
-        tasks.showAllTasks();
     }
 
     public void setAdapter() {
-        RecyclerAdapter adapter = new RecyclerAdapter(tasks, this);
+        RecyclerAdapter adapter = new RecyclerAdapter(this,this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
-
-        tasks.showAllTasks();
-    }
-
-    private void setUserInfo() {
-        Task task1 = new Task("task1", "22/12/2022");
-        tasks.addNewTask(task1);
-
-        Task task2 = new Task("task2", "22/12/2022");
-        task2.setDescription("halli hallo");
-        tasks.addNewTask(task2);
-
-        Task task3 = new Task("task3", "22/12/2022");
-        tasks.addNewTask(task3);
     }
 
     @Override
     public void onTaskClick(int position) {
         Intent intent = new Intent(this, TaskDetailsActivity.class);
+        String id = String.valueOf(tasks.get(position).getId());
         String title = tasks.get(position).getTitle();
         String desc = tasks.get(position).getDescription() + " ";
         String date = tasks.get(position).getDueDate();
-        //boolean checked = tasks.get(position).getIfChecked();
+        String status = String.valueOf(tasks.get(position).getStatus());
 
+        intent.putExtra(Extra_ID, id);
         intent.putExtra(Extra_TITLE, title);
         intent.putExtra(Extra_DESC, desc);
-        intent.putExtra(Extra_DATE, date.toString());
-
-        //intent.putExtra(String.valueOf(Extra_CHECKED), checked);
+        intent.putExtra(Extra_DATE, date);
+        intent.putExtra(Extra_STATUS, status);
 
         startActivity(intent);
     }
 
     public void addTask(Task task){
-        tasks.addNewTask(task);
+        db.insertTask(task);
     }
 }

@@ -4,11 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
@@ -68,18 +69,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             if(cursor != null){ // if we got values / rows continue
                 if(cursor.moveToFirst()){
                     do{
-                        /*
-                        int id = cursor.getInt(cursor.getColumnIndex(ID));
-                        String title = cursor.getString(cursor.getColumnIndex(TITLE));
-                        String description = cursor.getString(cursor.getColumnIndex(DESCRIPTION));
-                        String dueDate = cursor.getString(cursor.getColumnIndex(DUEDATE));
-                        int status = cursor.getInt(cursor.getColumnIndex(STATUS));
-
-                        Task task = new Task(title, dueDate);
-                        task.setId(id);
-                        task.setDescription(description);
-                        task.setChecked(status);*/
-
                         Task task = getTask(cursor);
                         taskList.add(task);
                     }
@@ -95,23 +84,25 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return taskList;
     }
 
-
     private Task getTask(Cursor cursor){
         Task task = null;
         //Cursor cursor = db.rawQuery("select * from " + TODO_TABLE + " where " + ID+ "='" + idx + "'" , null);
         if(cursor != null){
+            @SuppressLint("Range") String id = cursor.getString(cursor.getColumnIndex(ID));
             @SuppressLint("Range") String title = cursor.getString(cursor.getColumnIndex(TITLE));
             @SuppressLint("Range") String dueDate = cursor.getString(cursor.getColumnIndex(DUEDATE));
             @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex(DESCRIPTION));
             @SuppressLint("Range") String status = cursor.getString(cursor.getColumnIndex(STATUS));
             task = new Task(title, dueDate);
             task.setDescription(description);
+            task.setId(Integer.valueOf(id));
+            task.setStatus(Integer.valueOf(status));
         }
 
         return task;
     }
 
-    private Task getTask(int idx){
+    public Task getTask(int idx){
         Task task = null;
         Cursor cursor = db.rawQuery("select * from " + TODO_TABLE + " where " + ID+ "='" + idx + "'" , null);
         if(cursor != null){
@@ -120,7 +111,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex(DESCRIPTION));
             @SuppressLint("Range") String status = cursor.getString(cursor.getColumnIndex(STATUS));
             task = new Task(title, dueDate);
+            task.setId(idx);
             task.setDescription(description);
+            task.setStatus(Integer.valueOf(status));
         }
 
         return task;
@@ -129,7 +122,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void updateStatus(int id, int status){
         ContentValues cv = new ContentValues();
         cv.put(STATUS, status);
-        db.update(TODO_TABLE, cv, ID + "= ?", new String[] {String.valueOf(id)});
+        String idS = String.valueOf(id);
+        int cur = db.update(TODO_TABLE, cv, ID + "= ?", new String[] {idS});
+        Log.d("Update", String.valueOf(cur));
     }
 
     public void updateTask(int id, String task) {
@@ -139,6 +134,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public void deleteTask(int id){
-        db.delete(TODO_TABLE, ID + "= ?", new String[] {String.valueOf(id)});
+        int cur = db.delete(TODO_TABLE, ID + "= ?", new String[] {String.valueOf(id)});
+    }
+
+    public int getSize(){
+        //db.rawQuery("select * from " + TODO_TABLE, null);
+        int numRows = (int) DatabaseUtils.queryNumEntries(db, TODO_TABLE);
+        return numRows;
     }
 }

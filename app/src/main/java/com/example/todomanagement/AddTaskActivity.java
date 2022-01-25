@@ -15,7 +15,7 @@ import java.util.Calendar;
 
 public class AddTaskActivity extends AppCompatActivity{
 
-    private MainActivity mainActivity = new MainActivity();
+    private DatabaseHandler db;
     private EditText editText;
     private EditText editDescription;
     private EditText editDate;
@@ -28,6 +28,8 @@ public class AddTaskActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_task_activity);
 
+        db = new DatabaseHandler(this);
+
         Button newTaskButton = findViewById(R.id.button_add_new_task);
 
         editText = findViewById(R.id.task_title);
@@ -38,7 +40,6 @@ public class AddTaskActivity extends AppCompatActivity{
             private String current = "";
             private String ddmmyyyy = "DDMMYYYY";
             private Calendar cal = Calendar.getInstance();
-
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -84,12 +85,8 @@ public class AddTaskActivity extends AppCompatActivity{
                     current = clean;
                     editDate.setText(current);
                     editDate.setSelection(sel < current.length() ? sel : current.length());
-
-
-
                 }
             }
-
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -99,21 +96,21 @@ public class AddTaskActivity extends AppCompatActivity{
         });
 
         newTaskButton.setOnClickListener(view -> {
-            //db = new ContactsContract.Data()
-
-
             String title = editText.getText().toString();
             String description = editDescription.getText().toString();
             String duedate = editDate.getText().toString();
 
             if (!title.equals("")){
                 Task task = new Task(title, duedate);
+
                 if(description != null){
                     task.setDescription(description);
                 }
+                db.openDatabase();
+                db.insertTask(task);
+
                 Intent intent = new Intent(this.getApplicationContext(), MainActivity.class);
                 this.startActivity(intent);
-                DatabaseHandler db = new DatabaseHandler(this);
 
             }else {
                 Toast.makeText(this.getApplicationContext(),"Please enter a Title",Toast.LENGTH_LONG).show();

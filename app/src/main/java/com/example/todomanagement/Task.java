@@ -5,8 +5,8 @@ public class Task{
     private String title;
     private String description;
     private String dueDate;
-    private int status;
-    private boolean isChecked;
+    private int status = 0;
+    //private boolean isChecked;
 
     public Task(String name, String dueDate){
         this.title = name;
@@ -14,7 +14,6 @@ public class Task{
     }
 
     public int getId(){ return id; }
-
     public void setId(int id) { this.id = id; }
 
     public String getTitle(){ return title; }
@@ -28,8 +27,7 @@ public class Task{
     public int getStatus() { return status;}
     public void setStatus(int status) { this.status = status;}
 
-    public boolean getIfChecked() { return isChecked; }
-    public void setChecked(boolean checked) {
-        this.isChecked = checked;
+    public boolean getIfChecked(){
+        return (status==1) ? true : false;
     }
 }
