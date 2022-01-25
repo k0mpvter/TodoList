@@ -39,28 +39,6 @@ public class TaskDetailsActivity extends AppCompatActivity{
             startActivity(mainActivity);
         });
 
-
-        /*
-        Intent intent = getIntent();
-
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                databaseHandler.openDatabase();
-
-                Log.d("TAG", "onCheckedChanged: " + id);
-                //Log.d("TAG", "onCheckedChanged: " + isChecked);
-                if (isChecked) {
-                    //databaseHandler.updateStatus(getAdapterPosition(), 1);
-                    databaseHandler.updateStatus(id, 1);
-                    //status.set(position, true);
-                } else {
-                    //status.set(position, false);
-                    //databaseHandler.updateStatus(getAdapterPosition(), 0);
-                    databaseHandler.updateStatus(id, 0);
-                }
-            }
-        });
-*/
         setDetailsInformation();
     }
 
