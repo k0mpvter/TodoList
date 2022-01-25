@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.O
         String title = tasks.get(position).getTitle();
         String desc = tasks.get(position).getDescription() + " ";
         String date = tasks.get(position).getDueDate();
-        //String status = String.valueOf(tasks.get(position).getStatus());
         CheckBox checkbox = (CheckBox) findViewById(R.id.checkbox_view);
 
         String status = String.valueOf(checkbox.isChecked());
