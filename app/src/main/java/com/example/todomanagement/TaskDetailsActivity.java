@@ -1,27 +1,19 @@
 package com.example.todomanagement;
 
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import java.util.Date;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class TaskDetailsActivity extends AppCompatActivity{
     private DatabaseHandler databaseHandler;
 
     private Intent intent;
-    private Button backButton;
-    private CheckBox checkBox;
-    private Button deleteButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,19 +24,17 @@ public class TaskDetailsActivity extends AppCompatActivity{
         databaseHandler.openDatabase();
 
         this.intent = getIntent();
-        this.backButton = findViewById(R.id.back_button);
-        this.checkBox = (CheckBox) this.findViewById(R.id.checkbox_view);
-        this.deleteButton = findViewById(R.id.task_delete_button);
+        Button backButton = findViewById(R.id.back_button);
+        CheckBox checkBox = (CheckBox) this.findViewById(R.id.checkbox_view);
+        Button deleteButton = findViewById(R.id.task_delete_button);
         Intent mainActivity = new Intent(getApplicationContext(), MainActivity.class);
 
-        int id = Integer.valueOf(intent.getStringExtra(MainActivity.Extra_ID));
+        int id = Integer.parseInt(intent.getStringExtra(MainActivity.Extra_ID));
 
-        backButton.setOnClickListener(view -> {
-            startActivity(mainActivity);
-        });
+        backButton.setOnClickListener(view -> startActivity(mainActivity));
 
         deleteButton.setOnClickListener(view -> {
-            Log.d("Here", "still" + String.valueOf(id));
+            Log.d("Here", "still" + id);
             databaseHandler.deleteTask(id);
             startActivity(mainActivity);
         });
@@ -80,7 +70,7 @@ public class TaskDetailsActivity extends AppCompatActivity{
         String title = intent.getStringExtra(MainActivity.Extra_TITLE);
         String desc = intent.getStringExtra(MainActivity.Extra_DESC);
         String date = intent.getStringExtra(MainActivity.Extra_DATE);
-        Boolean checked = intent.getStringExtra(MainActivity.Extra_STATUS).equals("1");
+        boolean checked = intent.getStringExtra(MainActivity.Extra_STATUS).equals("1");
 
         // Capture the layout's TextView and set the string as its text
         TextView titleView = findViewById(R.id.title_view);
@@ -95,15 +85,12 @@ public class TaskDetailsActivity extends AppCompatActivity{
         checkedView.setChecked(checked);
 
         CheckBox check =  (CheckBox) this.findViewById(R.id.task_checkBox);
-        check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                Log.d("Checkbox", "check test");
-                if (isChecked) {
-                    databaseHandler.updateStatus(Integer.valueOf(id), 1);
-                } else {
-                    databaseHandler.updateStatus(Integer.valueOf(id), 0);
-                }
+        check.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            Log.d("Checkbox", "check test");
+            if (isChecked) {
+                databaseHandler.updateStatus(Integer.parseInt(id), 1);
+            } else {
+                databaseHandler.updateStatus(Integer.parseInt(id), 0);
             }
         });
     }

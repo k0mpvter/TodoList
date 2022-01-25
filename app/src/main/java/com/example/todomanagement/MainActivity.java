@@ -1,14 +1,14 @@
 package com.example.todomanagement;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.CheckBox;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -21,9 +21,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.O
     public static final String Extra_DESC = "com.example.todomanagement.DESC";
     public static final String Extra_DATE = "com.example.todomanagement.DATE";
     public static final String Extra_STATUS = "com.example.todomanagement.STATUS";
-    //private TaskManager tasks;
 
-    private DatabaseHandler db = new DatabaseHandler(this);
+    private final DatabaseHandler db = new DatabaseHandler(this);
     private RecyclerView recyclerView;
     private ArrayList<Task> tasks;
     FloatingActionButton button;
@@ -33,19 +32,18 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        button = findViewById(R.id.button_new_task);
         recyclerView = findViewById(R.id.recyclerView);
+
         db.openDatabase();
         tasks = db.getAllTasks();
 
         setAdapter();
 
-        button = findViewById(R.id.button_new_task);
-
         button.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), AddTaskActivity.class);
             startActivity(intent);
         });
-
     }
 
     public void setAdapter() {
@@ -78,9 +76,5 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.O
         intent.putExtra(Extra_STATUS, status);
 
         startActivity(intent);
-    }
-
-    public void addTask(Task task){
-        db.insertTask(task);
     }
 }

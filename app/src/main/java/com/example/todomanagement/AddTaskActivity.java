@@ -1,15 +1,15 @@
 package com.example.todomanagement;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Calendar;
 
@@ -22,8 +22,6 @@ public class AddTaskActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        //TODO inject Taskmanager (Dagger)
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_task_activity);
@@ -38,9 +36,10 @@ public class AddTaskActivity extends AppCompatActivity{
 
         editDate.addTextChangedListener(new TextWatcher() {
             private String current = "";
-            private String ddmmyyyy = "DDMMYYYY";
-            private Calendar cal = Calendar.getInstance();
+            private final Calendar cal = Calendar.getInstance();
 
+
+            @SuppressLint("DefaultLocale")
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!s.toString().equals(current)) {
@@ -56,6 +55,7 @@ public class AddTaskActivity extends AppCompatActivity{
                     if (clean.equals(cleanC)) sel--;
 
                     if (clean.length() < 8){
+                        String ddmmyyyy = "DDMMYYYY";
                         clean = clean + ddmmyyyy.substring(clean.length());
                     }else{
                         //This part makes sure that when we finish entering numbers
@@ -67,13 +67,13 @@ public class AddTaskActivity extends AppCompatActivity{
                         if(mon > 12) mon = 12;
                         cal.set(Calendar.MONTH, mon-1);
 
-                        year = (year<1900)?1900:(year>2100)?2100:year;
+                        year = (year<1900)?1900: Math.min(year, 2100);
                         cal.set(Calendar.YEAR, year);
-                        // ^ first set year for the line below to work correctly
+                        //first set year for the line below to work correctly
                         //with leap years - otherwise, date e.g. 29/02/2012
                         //would be automatically corrected to 28/02/2012
 
-                        day = (day > cal.getActualMaximum(Calendar.DATE))? cal.getActualMaximum(Calendar.DATE):day;
+                        day = Math.min(day, cal.getActualMaximum(Calendar.DATE));
                         clean = String.format("%02d%02d%02d",day, mon, year);
                     }
 
@@ -81,10 +81,14 @@ public class AddTaskActivity extends AppCompatActivity{
                             clean.substring(2, 4),
                             clean.substring(4, 8));
 
-                    sel = sel < 0 ? 0 : sel;
+                    sel = Math.max(sel, 0);
                     current = clean;
                     editDate.setText(current);
-                    editDate.setSelection(sel < current.length() ? sel : current.length());
+                    editDate.setSelection(Math.min(sel, current.length()));
+
+
+
+                    editDate.setSelection(Math.min(sel, current.length()));
                 }
             }
 
@@ -96,6 +100,8 @@ public class AddTaskActivity extends AppCompatActivity{
         });
 
         newTaskButton.setOnClickListener(view -> {
+            //db = new ContactsContract.Data()
+
             String title = editText.getText().toString();
             String description = editDescription.getText().toString();
             String duedate = editDate.getText().toString();
@@ -103,7 +109,7 @@ public class AddTaskActivity extends AppCompatActivity{
             if (!title.equals("")){
                 Task task = new Task(title, duedate);
 
-                if(description != null){
+                if(!description.equals("")){
                     task.setDescription(description);
                 }
                 db.openDatabase();

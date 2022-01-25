@@ -2,11 +2,10 @@ package com.example.todomanagement;
 
 public class Task{
     private int id;
-    private String title;
+    private final String title;
     private String description;
-    private String dueDate;
+    private final String dueDate;
     private int status = 0;
-    //private boolean isChecked;
 
     public Task(String name, String dueDate){
         this.title = name;
@@ -24,10 +23,9 @@ public class Task{
         this.description = description;
     }
 
-    public int getStatus() { return status;}
     public void setStatus(int status) { this.status = status;}
 
     public boolean getIfChecked(){
-        return (status==1) ? true : false;
+        return status == 1;
     }
 }

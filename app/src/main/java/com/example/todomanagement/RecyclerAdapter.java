@@ -7,9 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,24 +15,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder> {
-    private Context context;
-    private ArrayList<Task> tasks;
-    private OnTaskListener mOnTaskListener;
-    private DatabaseHandler databaseHandler;
+    private final OnTaskListener mOnTaskListener;
+    private final DatabaseHandler databaseHandler;
 
     private int globalPosition;
 
     public RecyclerAdapter(Context context,OnTaskListener onTaskListener) {
-        this.context = context;
         this.mOnTaskListener = onTaskListener;
         this.databaseHandler = new DatabaseHandler(context);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView titleView;
-        private TextView descView;
-        private TextView duedateView;
-        private CheckBox checkedView;
+        private final TextView titleView;
+        private final TextView descView;
+        private final TextView duedateView;
+        private final CheckBox checkedView;
 
         OnTaskListener onTaskListener;
 
@@ -49,17 +44,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
             this.onTaskListener = onTaskListener;
             itemView.setOnClickListener(this);
-            checkedView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                    Log.d("ajslkdfjasldf","sldflasdjfasdf " + String.valueOf(isChecked));
-                    Log.d("ajslkdfjasldf","sldflasdjfasdf " + globalPosition);
-                    Log.d("Checkbox", "check test");
-                    if (isChecked) {
-                        databaseHandler.updateStatus(Integer.valueOf(globalPosition), 1);
-                    } else {
-                        databaseHandler.updateStatus(Integer.valueOf(globalPosition), 0);
-                    }
+            checkedView.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+                Log.d("ajslkdfjasldf","sldflasdjfasdf " + isChecked);
+                Log.d("ajslkdfjasldf","sldflasdjfasdf " + globalPosition);
+                Log.d("Checkbox", "check test");
+                if (isChecked) {
+                    databaseHandler.updateStatus(globalPosition, 1);
+                } else {
+                    databaseHandler.updateStatus(globalPosition, 0);
                 }
             });
         }
@@ -82,7 +74,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     public void onBindViewHolder(@NonNull RecyclerAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
         globalPosition = position;
         databaseHandler.openDatabase();
-        this.tasks = databaseHandler.getAllTasks();
+        ArrayList<Task> tasks = databaseHandler.getAllTasks();
 
         String title = tasks.get(position).getTitle();
         String desc = tasks.get(position).getDescription();
