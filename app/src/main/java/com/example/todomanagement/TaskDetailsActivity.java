@@ -100,12 +100,8 @@ public class TaskDetailsActivity extends AppCompatActivity{
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 Log.d("Checkbox", "check test");
                 if (isChecked) {
-                    //databaseHandler.updateStatus(getAdapterPosition(), 1);
                     databaseHandler.updateStatus(Integer.valueOf(id), 1);
-                    //status.set(position, true);
                 } else {
-                    //status.set(position, false);
-                    //databaseHandler.updateStatus(getAdapterPosition(), 0);
                     databaseHandler.updateStatus(Integer.valueOf(id), 0);
                 }
             }

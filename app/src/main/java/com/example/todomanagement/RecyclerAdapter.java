@@ -21,7 +21,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     private ArrayList<Task> tasks;
     private OnTaskListener mOnTaskListener;
     private DatabaseHandler databaseHandler;
-    private CheckBox checkBox;
+
+    private int globalPosition;
 
     public RecyclerAdapter(Context context,OnTaskListener onTaskListener) {
         this.context = context;
@@ -39,6 +40,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
         public MyViewHolder(@NonNull View view, OnTaskListener onTaskListener) {
             super(view);
+
+            databaseHandler.openDatabase();
             titleView = view.findViewById(R.id.title_view);
             descView = view.findViewById(R.id.description_view);
             duedateView = view.findViewById(R.id.date_view);
@@ -46,9 +49,21 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
             this.onTaskListener = onTaskListener;
             itemView.setOnClickListener(this);
-
-            checkBox = (CheckBox) itemView.findViewById(R.id.checkbox_view);
+            checkedView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                    Log.d("ajslkdfjasldf","sldflasdjfasdf " + String.valueOf(isChecked));
+                    Log.d("ajslkdfjasldf","sldflasdjfasdf " + globalPosition);
+                    Log.d("Checkbox", "check test");
+                    if (isChecked) {
+                        databaseHandler.updateStatus(Integer.valueOf(globalPosition), 1);
+                    } else {
+                        databaseHandler.updateStatus(Integer.valueOf(globalPosition), 0);
+                    }
+                }
+            });
         }
+
 
         @Override
         public void onClick(View view) {
@@ -65,18 +80,18 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        globalPosition = position;
         databaseHandler.openDatabase();
         this.tasks = databaseHandler.getAllTasks();
 
-        int id = tasks.get(position).getId();
         String title = tasks.get(position).getTitle();
         String desc = tasks.get(position).getDescription();
         String date = tasks.get(position).getDueDate();
         boolean checked = tasks.get(position).getIfChecked();
-        Log.d("TESTST",  String.valueOf(position)+ "onBindViewHolder: " + String.valueOf(checked));
 
         holder.titleView.setText(title);
         holder.duedateView.setText(date);
+        holder.checkedView.setChecked(checked);
 
         try{
             holder.descView.setText(desc);
@@ -84,8 +99,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         catch (NullPointerException nullPointerException){
             //holder.descView.setText("No description");
         }
-
-        checkBox.setChecked(checked);
 
     }
 

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.CheckBox;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -55,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.O
         recyclerView.setAdapter(adapter);
     }
 
+
+
     @Override
     public void onTaskClick(int position) {
         Intent intent = new Intent(this, TaskDetailsActivity.class);
@@ -62,7 +65,11 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.O
         String title = tasks.get(position).getTitle();
         String desc = tasks.get(position).getDescription() + " ";
         String date = tasks.get(position).getDueDate();
-        String status = String.valueOf(tasks.get(position).getStatus());
+        //String status = String.valueOf(tasks.get(position).getStatus());
+        CheckBox checkbox = (CheckBox) findViewById(R.id.checkbox_view);
+
+        String status = String.valueOf(checkbox.isChecked());
+        Log.d("Status..", status);
 
         intent.putExtra(Extra_ID, id);
         intent.putExtra(Extra_TITLE, title);
