@@ -1,3 +1,8 @@
+
+/*
+This Class is responsible for the connection between the database and the application. It can add or delete tasks
+to or from the database.
+ */
 package com.example.todomanagement;
 
 import android.annotation.SuppressLint;
@@ -12,7 +17,6 @@ import android.util.Log;
 import java.util.ArrayList;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
-
     private static final int VERSION = 1;
     private static final String NAME = "toDoListDatabase";
     private static final String TODO_TABLE = "todo";
@@ -35,7 +39,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(CREATE_TODO_TABLE);
     }
 
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
@@ -48,6 +51,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db = this.getWritableDatabase();
     }
 
+    //Inserts a task into the database table.
     public void insertTask(Task task){
         ContentValues contentValues = new ContentValues();
         contentValues.put(TITLE, task.getTitle());
@@ -59,6 +63,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.insert(TODO_TABLE, null, contentValues);
     }
 
+    //fetches all tasks from the database
     public ArrayList<Task> getAllTasks(){
         ArrayList<Task> taskList = new ArrayList<>();
         db.beginTransaction();
@@ -75,14 +80,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             }
         } finally {
             db.endTransaction();
-            //assert cursor != null;
         }
         return taskList;
     }
 
+    //fetches one specific task
     private Task getTask(Cursor cursor){
         Task task = null;
-        //Cursor cursor = db.rawQuery("select * from " + TODO_TABLE + " where " + ID+ "='" + idx + "'" , null);
         if(cursor != null){
             @SuppressLint("Range") String id = cursor.getString(cursor.getColumnIndex(ID));
             @SuppressLint("Range") String title = cursor.getString(cursor.getColumnIndex(TITLE));
@@ -94,10 +98,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             task.setId(Integer.parseInt(id));
             task.setStatus(Integer.parseInt(status));
         }
-
         return task;
     }
 
+    //checkes if the task has already been checked or not
     public void updateStatus(int id, int status){
         ContentValues cv = new ContentValues();
         cv.put(STATUS, status);
@@ -110,8 +114,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         int cur = db.delete(TODO_TABLE, ID + "= ?", new String[] {String.valueOf(id)});
     }
 
+    //returns the size of all tasks
     public int getSize(){
-        //db.rawQuery("select * from " + TODO_TABLE, null);
         return (int) DatabaseUtils.queryNumEntries(db, TODO_TABLE);
     }
 }

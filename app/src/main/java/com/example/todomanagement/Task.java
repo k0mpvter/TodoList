@@ -1,3 +1,7 @@
+/*
+This class describes the attributes of each task element. You can get and set these values with the given methods.
+ */
+
 package com.example.todomanagement;
 
 public class Task{

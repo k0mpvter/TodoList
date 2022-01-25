@@ -1,5 +1,10 @@
-package com.example.todomanagement;
+/*
+This Activity shows the user more details of the task that was clicked on the MainActivity. On this screen you can
+see the title, the description and the due date of the given task. from here on you can also delete and mark the task
+as checked/unchecked.
+ */
 
+package com.example.todomanagement;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class TaskDetailsActivity extends AppCompatActivity{
     private DatabaseHandler databaseHandler;
-
     private Intent intent;
 
     @Override
@@ -72,5 +76,4 @@ public class TaskDetailsActivity extends AppCompatActivity{
             }
         });
     }
-
 }

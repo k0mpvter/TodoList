@@ -1,3 +1,9 @@
+/*
+This is our MainActivity. It is the first screen you see when you open this application. It shows a List of all
+Tasks that you have created. From here on you can add new tasks. You can check a task if it is complete or
+see further details when you click on it.
+ */
+
 package com.example.todomanagement;
 
 import android.content.Intent;
@@ -15,24 +21,21 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements RecyclerAdapter.OnTaskListener {
-
     public static final String Extra_ID = "com.example.todomanagement.ID";
     public static final String Extra_TITLE = "com.example.todomanagement.TITLE";
     public static final String Extra_DESC = "com.example.todomanagement.DESC";
     public static final String Extra_DATE = "com.example.todomanagement.DATE";
     public static final String Extra_STATUS = "com.example.todomanagement.STATUS";
-
     private final DatabaseHandler db = new DatabaseHandler(this);
     private RecyclerView recyclerView;
     private ArrayList<Task> tasks;
-    FloatingActionButton button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        button = findViewById(R.id.button_new_task);
+        FloatingActionButton button = findViewById(R.id.button_new_task);
         recyclerView = findViewById(R.id.recyclerView);
 
         db.openDatabase();
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.O
         });
     }
 
+    //Sets the adapter of the recyclerView
     public void setAdapter() {
         RecyclerAdapter adapter = new RecyclerAdapter(this,this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
@@ -53,8 +57,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.O
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
     }
-
-
 
     @Override
     public void onTaskClick(int position) {

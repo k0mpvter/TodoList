@@ -1,3 +1,7 @@
+/*
+This Activity represents the Screen where you can add a new Task to your Board. You can add a title, a description and a
+due date. The date automatically changes itself when entering a wrong year or a year that is in the past.
+ */
 package com.example.todomanagement;
 
 import android.annotation.SuppressLint;
@@ -14,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Calendar;
 
 public class AddTaskActivity extends AppCompatActivity{
-
     private DatabaseHandler db;
     private EditText editText;
     private EditText editDescription;
@@ -104,10 +107,10 @@ public class AddTaskActivity extends AppCompatActivity{
 
             String title = editText.getText().toString();
             String description = editDescription.getText().toString();
-            String duedate = editDate.getText().toString();
+            String dueDate = editDate.getText().toString();
 
             if (!title.equals("")){
-                Task task = new Task(title, duedate);
+                Task task = new Task(title, dueDate);
 
                 if(!description.equals("")){
                     task.setDescription(description);

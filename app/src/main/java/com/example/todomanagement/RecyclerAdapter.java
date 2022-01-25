@@ -1,8 +1,12 @@
+/*
+This is the Adapterclass used for the List of Tasks shown in the MainActivity. It is the adapter between
+the MainActivity and the RecyclerView.
+ */
+
 package com.example.todomanagement;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +21,6 @@ import java.util.ArrayList;
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder> {
     private final OnTaskListener mOnTaskListener;
     private final DatabaseHandler databaseHandler;
-
     private int globalPosition;
 
     public RecyclerAdapter(Context context,OnTaskListener onTaskListener) {
@@ -33,6 +36,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
         OnTaskListener onTaskListener;
 
+        //MyViewHolder handles what of the List is shown how
         public MyViewHolder(@NonNull View view, OnTaskListener onTaskListener) {
             super(view);
 
@@ -45,9 +49,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             this.onTaskListener = onTaskListener;
             itemView.setOnClickListener(this);
             checkedView.setOnCheckedChangeListener((compoundButton, isChecked) -> {
-                Log.d("ajslkdfjasldf","sldflasdjfasdf " + isChecked);
-                Log.d("ajslkdfjasldf","sldflasdjfasdf " + globalPosition);
-                Log.d("Checkbox", "check test");
                 if (isChecked) {
                     databaseHandler.updateStatus(globalPosition, 1);
                 } else {
@@ -55,7 +56,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
                 }
             });
         }
-
 
         @Override
         public void onClick(View view) {
@@ -89,9 +89,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             holder.descView.setText(desc);
         }
         catch (NullPointerException nullPointerException){
-            //holder.descView.setText("No description");
+            nullPointerException.printStackTrace();
         }
-
     }
 
     @Override
